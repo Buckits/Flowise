@@ -1,0 +1,40 @@
+services:
+    flowise:
+        image: gjdeal/flowise:latest
+        restart: always
+        environment:
+            - PORT=${PORT:-3000}
+            - FLOWISE_USERNAME=${FLOWISE_USERNAME:-admin}
+            - FLOWISE_PASSWORD=${FLOWISE_PASSWORD:-password}
+            - DATABASE_PATH=${DATABASE_PATH:-/root/.flowise/database}
+            - APIKEY_PATH=${APIKEY_PATH:-/root/.flowise/apikey.json}
+            - BLOB_STORAGE_PATH=${BLOB_STORAGE_PATH:-/root/.flowise/blob}
+        ports:
+            - '${PORT:-3000}:${PORT:-3000}'
+        healthcheck:
+            test: ['CMD', 'curl', '-f', 'http://localhost:${PORT:-3000}/api/v1/ping']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+        volumes:
+            - /mnt/portainer_station/flowise/data:/root/.flowise
+
+    neo4j:
+        image: docker.io/neo4j:5.26-community
+        ports:
+            - "7474:7474" # HTTP
+            - "7687:7687" # Bolt
+        environment:
+            - NEO4J_AUTH=${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-demodemo}
+            - NEO4J_server_memory_heap_initial__size=512m
+            - NEO4J_server_memory_heap_max__size=1G
+            - NEO4J_server_memory_pagecache_size=512m
+            - NEO4J_PLUGINS='["apoc"]'
+        healthcheck:
+            test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:7474"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s

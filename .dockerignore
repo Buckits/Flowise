@@ -1,0 +1,10 @@
+src/node_modules
+src/dist
+src/build
+
+**/node_modules
+**/build
+**/dist
+
+src/packages/server/.env
+src/packages/ui/.env
