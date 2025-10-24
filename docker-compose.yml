@@ -9,6 +9,7 @@ services:
             - DATABASE_PATH=${DATABASE_PATH:-/root/.flowise/database}
             - APIKEY_PATH=${APIKEY_PATH:-/root/.flowise/apikey.json}
             - BLOB_STORAGE_PATH=${BLOB_STORAGE_PATH:-/root/.flowise/blob}
+            - TOOL_FUNCTION_EXTERNAL_DEP=${TOOL_FUNCTION_EXTERNAL_DEP:-neo4j-driver}
         ports:
             - '${PORT:-3000}:${PORT:-3000}'
         healthcheck:
